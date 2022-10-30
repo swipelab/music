@@ -9,7 +9,7 @@ class App {
 
   factory App.production() {
     final store = Store()
-      ..addLazy((e) async => Playlist(''))
+      ..addLazy((e) async => Playlist(name: 'All'))
       ..addLazy(
         (e) async => Player(playlist: await e.resolve()),
       );
@@ -20,6 +20,8 @@ class App {
   final Store store;
 
   Completer<void>? _init;
+
+  Playlist get playlist => store.get<Playlist>();
 
   Player get player => store.get<Player>();
 

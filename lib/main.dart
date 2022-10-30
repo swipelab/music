@@ -1,4 +1,5 @@
 import 'package:app/app.dart';
+import 'package:app/views/player_view.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -39,10 +40,6 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  void _play() {
-    app.player.play();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,15 +50,12 @@ class _HomeViewState extends State<HomeView> {
           width: 48,
         ),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[],
-        ),
+      body: PlayerView(
+        playlist: app.playlist,
+        player: app.player,
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _play,
+        onPressed: app.player.play,
         tooltip: 'Play',
         child: const Icon(Icons.play_arrow),
       ), // This trailing comma makes auto-formatting nicer for build methods.

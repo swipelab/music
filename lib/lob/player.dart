@@ -1,20 +1,28 @@
 import 'package:app/lob/playlist.dart';
-import 'package:just_audio/just_audio.dart' as ja;
+import 'package:audioplayers/audioplayers.dart' as audio;
+import 'package:flutter/cupertino.dart';
+import 'package:stated/stated.dart';
 
-class Player {
+class Player extends Disposable with ChangeNotifier, Disposer {
   Player({
     required this.playlist,
-  });
+  }) {
+    playlist.subscribe(notifyListeners).disposeBy(this);
+  }
 
   final Playlist playlist;
-  final ja.AudioPlayer _player = ja.AudioPlayer();
+  final audio.AudioPlayer _player = audio.AudioPlayer();
 
-  Future<void> play() async {
-    final item = playlist.nextItem;
+  Future<void> play([Content? content]) async {
+    final item = content ?? playlist.nextItem;
     if (item == null) {
       return;
     }
-    await _player.setUrl(item.url);
-    await _player.play();
+
+    if (item.url.startsWith('music/')) {
+      await _player.play(audio.AssetSource(item.url));
+    } else {
+      await _player.play(audio.UrlSource(item.url));
+    }
   }
 }

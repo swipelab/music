@@ -12,7 +12,7 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: ^1.0.2
-  stated: 1.2.8
+  stated: 1.2.9
 
 dev_dependencies:
   flutter_test:
@@ -20,13 +20,13 @@ dev_dependencies:
 
   flutter_lints: 2.0.0
   flutter_launcher_icons: 0.10.0
-  just_audio: 0.9.30
+  audioplayers: 1.1.1
 
-# The following section is specific to Flutter packages.
 flutter:
   uses-material-design: true
   assets:
     - assets/
+    - assets/music/
 
 
 flutter_icons:
