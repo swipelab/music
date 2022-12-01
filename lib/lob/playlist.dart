@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:stated/stated.dart';
 
@@ -16,7 +18,58 @@ class Playlist with AsyncInit, ChangeNotifier {
   ];
   List<Content> items = [];
 
-  Content? get nextItem => items.isEmpty ? null : items.first;
+  Content? next({
+    Content? current,
+    bool random = false,
+    bool replay = false,
+  }) {
+    final index = nextIndex(
+      currentIndex: items.indexWhere((e) => e == current),
+      length: items.length,
+      random: random,
+      replay: replay,
+    );
+
+    return index == -1 ? null : items[index];
+  }
+
+  static int nextIndex({
+    required int currentIndex,
+    required int length,
+    required bool random,
+    required bool replay,
+  }) {
+    if (length == 0) {
+      return -1;
+    }
+
+    if (currentIndex == -1) {
+      if (length == 1) {
+        return 0;
+      } else {
+        return random ? Random().nextInt(length) : 0;
+      }
+    } else {
+      if (length == 1) {
+        return replay ? 0 : -1;
+      } else {
+        var nextIndex = currentIndex;
+        if (random) {
+          nextIndex = Random().nextInt(length);
+          if (nextIndex == currentIndex) {
+            nextIndex++;
+          }
+        } else {
+          nextIndex++;
+        }
+
+        if (nextIndex >= length) {
+          nextIndex = 0;
+        }
+        return nextIndex;
+      }
+    }
+  }
 
   @override
   Future<void> init() async {
@@ -45,4 +98,12 @@ class Content {
   final String name;
 
   final String url;
+
+  @override
+  bool operator ==(Object other) {
+    return other is Content && url == other.url;
+  }
+
+  @override
+  int get hashCode => url.hashCode;
 }

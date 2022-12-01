@@ -1,5 +1,6 @@
 import 'package:app/app.dart';
 import 'package:app/views/player_view.dart';
+import 'package:app/widgets/bottom_player.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -20,11 +21,14 @@ class Shell extends StatelessWidget {
       builder: (context, state) => state.connectionState != ConnectionState.done
           ? const ColoredBox(color: Colors.white)
           : MaterialApp(
-              title: 'music',
+              title: 'Music',
               theme: ThemeData(
                 primarySwatch: Colors.pink,
                 useMaterial3: true,
-                scaffoldBackgroundColor: Colors.white,
+                iconTheme: const IconThemeData(
+                  size: 24,
+                  color: Colors.black87,
+                ),
               ),
               home: const HomeView(),
             ),
@@ -54,10 +58,8 @@ class _HomeViewState extends State<HomeView> {
         playlist: app.playlist,
         player: app.player,
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: app.player.play,
-        tooltip: 'Play',
-        child: const Icon(Icons.play_arrow),
+      bottomNavigationBar: BottomPlayer(
+        player: app.player,
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }

@@ -1,5 +1,5 @@
 import 'package:app/app.dart';
-import 'package:app/lob/player.dart';
+import 'package:app/lob/player/player.dart';
 import 'package:app/lob/playlist.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';

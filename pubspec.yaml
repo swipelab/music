@@ -12,7 +12,9 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: ^1.0.2
+  font_awesome_flutter: 10.2.1
   stated: 1.2.9
+  audioplayers: 1.1.1
 
 dev_dependencies:
   flutter_test:
@@ -20,7 +22,6 @@ dev_dependencies:
 
   flutter_lints: 2.0.0
   flutter_launcher_icons: 0.10.0
-  audioplayers: 1.1.1
 
 flutter:
   uses-material-design: true
