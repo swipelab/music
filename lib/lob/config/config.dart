@@ -1,5 +1,5 @@
 import 'package:app/lob/config/config_field.dart';
-import 'package:app/lob/storage.dart';
+import 'package:app/services/storage.dart';
 
 class Config {
   Config({

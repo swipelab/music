@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:app/lob/config/config.dart';
 import 'package:app/lob/player/player.dart';
 import 'package:app/lob/playlist.dart';
-import 'package:app/lob/storage.dart';
+import 'package:app/services/storage.dart';
 import 'package:app/services/media_service.dart';
 import 'package:stated/stated.dart';
 
