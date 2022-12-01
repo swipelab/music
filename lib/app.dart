@@ -1,7 +1,10 @@
 import 'dart:async';
 
+import 'package:app/lob/config/config.dart';
 import 'package:app/lob/player/player.dart';
 import 'package:app/lob/playlist.dart';
+import 'package:app/lob/storage.dart';
+import 'package:app/services/media_service.dart';
 import 'package:stated/stated.dart';
 
 class App {
@@ -9,9 +12,20 @@ class App {
 
   factory App.production() {
     final store = Store()
+      ..addLazy((e) async => Storage())
+      ..addLazy(
+        (e) async => Config(
+          storage: await e.resolve(),
+        ),
+      )
+      ..addLazy((e) async => MediaService())
       ..addLazy((e) async => Playlist(name: 'All'))
       ..addLazy(
-        (e) async => Player(playlist: await e.resolve()),
+        (e) async => Player(
+          mediaService: await e.resolve(),
+          playlist: await e.resolve(),
+          config: await e.resolve(),
+        ),
       );
 
     return App(store);

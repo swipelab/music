@@ -1,47 +1,39 @@
 import 'dart:async';
 
+import 'package:app/lob/config/config.dart';
 import 'package:app/lob/playlist.dart';
-import 'package:audioplayers/audioplayers.dart' as audio;
+import 'package:app/services/media_service.dart';
 import 'package:stated/stated.dart';
 import 'player_state.dart';
 
 class Player extends Stated<PlayerState> with Disposer {
   Player({
+    required this.mediaService,
     required this.playlist,
+    required this.config,
   }) {
-    addDispose(_player.onPlayerStateChanged.listen(_onPlayerEvent).cancel);
+    mediaService.onCompleted(playNext).disposeBy(this);
+    mediaService.subscribe(setState).disposeBy(this);
   }
 
-  void _onPlayerEvent(audio.PlayerState state) {
-    switch (state) {
-      case audio.PlayerState.completed:
-        //TODO: move next
-        setState();
-        break;
-      case audio.PlayerState.stopped:
-      case audio.PlayerState.playing:
-      case audio.PlayerState.paused:
-        setState();
-        break;
-    }
-  }
-
+  final MediaService mediaService;
   final Playlist playlist;
 
-  bool get _isPlaying => _player.state == audio.PlayerState.playing;
-  final audio.AudioPlayer _player = audio.AudioPlayer();
+  final Config config;
 
-  bool _isShuffled = false;
-  bool _isReplay = false;
   Content? _current;
   final List<Content> _history = <Content>[];
 
+  bool get _isShuffled => config.playerIsShuffleOn.value;
+
+  bool get _isReplay => config.playerIsReplayOn.value;
+
   void togglePlay() {
-    if (_isPlaying) {
-      _player.pause();
+    if (mediaService.isPlaying) {
+      mediaService.pause();
     } else {
       if (_current != null) {
-        _player.resume();
+        mediaService.resume();
       } else {
         playNext();
       }
@@ -53,29 +45,23 @@ class Player extends Stated<PlayerState> with Disposer {
 
     _current = item;
     if (item == null) {
-      _player.stop();
+      mediaService.stop();
       return;
     }
-    audio.Source? source;
-    if (item.url.startsWith('music/')) {
-      source = audio.AssetSource(item.url);
-    } else {
-      source = audio.UrlSource(item.url);
-    }
 
-    await _player.play(
-      source,
+    mediaService.play(
+      item.url,
       position: const Duration(),
     );
   }
 
   void toggleShuffle() {
-    _isShuffled = !_isShuffled;
+    config.playerIsShuffleOn.value = !_isShuffled;
     setState();
   }
 
   void toggleReplay() {
-    _isReplay = !_isReplay;
+    config.playerIsReplayOn.value = !_isReplay;
     setState();
   }
 
@@ -113,7 +99,7 @@ class Player extends Stated<PlayerState> with Disposer {
       canPlay: playlist.items.isNotEmpty,
       canPlayNext: next != null,
       isShuffled: _isShuffled,
-      isPlaying: _isPlaying,
+      isPlaying: mediaService.isPlaying,
       isReplay: _isReplay,
     );
   }
