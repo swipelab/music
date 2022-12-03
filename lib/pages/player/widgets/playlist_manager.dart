@@ -1,15 +1,14 @@
-import 'package:app/app.dart';
 import 'package:app/lob/player/player.dart';
 import 'package:app/lob/playlist.dart';
+import 'package:app/pages/player/widgets/media_asset_tile.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
-class PlayerView extends StatelessWidget {
-  const PlayerView({
+class PlayerManager extends StatelessWidget {
+  const PlayerManager({
     required this.playlist,
     required this.player,
-    super.key,
-  });
+    Key? key,
+  }) : super(key: key);
 
   final Playlist playlist;
   final Player player;
@@ -36,32 +35,12 @@ class PlayerView extends StatelessWidget {
           animation: playlist,
           builder: (context, _) => SliverList(
             delegate: SliverChildBuilderDelegate(
-              (context, i) => ContentTile(playlist.items[i]),
+              (context, i) => MediaAssetTile(playlist.items[i]),
               childCount: playlist.items.length,
             ),
           ),
         ),
       ],
-    );
-  }
-}
-
-class ContentTile extends StatelessWidget {
-  const ContentTile(
-    this.meta, {
-    super.key,
-  });
-
-  final Content meta;
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      leading: Image.asset('assets/app-icon.png'),
-      title: Text(
-        meta.name,
-      ),
-      onTap: () => app.player.play(meta),
     );
   }
 }

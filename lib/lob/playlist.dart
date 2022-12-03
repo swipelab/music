@@ -16,10 +16,10 @@ class Playlist with AsyncInit, ChangeNotifier {
     Source(name: 'All'),
     Source(name: 'Folders'),
   ];
-  List<Content> items = [];
+  List<MediaAsset> items = [];
 
-  Content? next({
-    Content? current,
+  MediaAsset? next({
+    MediaAsset? current,
     bool random = false,
     bool replay = false,
   }) {
@@ -74,11 +74,12 @@ class Playlist with AsyncInit, ChangeNotifier {
   @override
   Future<void> init() async {
     items = [
-      Content(
-        'https://cdn.pixabay.com/download/audio/2021/11/01/audio_67c5757bac.mp3?filename=watr-fluid-10149.mp3',
+      MediaAsset(
+        Uri.parse(
+            'https://cdn.pixabay.com/download/audio/2021/11/01/audio_67c5757bac.mp3?filename=watr-fluid-10149.mp3'),
       ),
-      Content(
-        'music/Scorpions_Wind_Of_Change.mp3',
+      MediaAsset(
+        Uri.parse('assets:///music/Scorpions_Wind_Of_Change.mp3'),
       ),
     ];
   }
@@ -92,16 +93,16 @@ class Source {
   final String name;
 }
 
-class Content {
-  Content(this.url) : name = Uri.parse(url).pathSegments.last;
+class MediaAsset {
+  MediaAsset(this.url) : name = url.pathSegments.last;
 
   final String name;
 
-  final String url;
+  final Uri url;
 
   @override
   bool operator ==(Object other) {
-    return other is Content && url == other.url;
+    return other is MediaAsset && url == other.url;
   }
 
   @override

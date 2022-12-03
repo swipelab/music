@@ -1,16 +1,19 @@
 import 'package:app/app.dart';
-import 'package:app/views/player_view.dart';
-import 'package:app/widgets/bottom_player.dart';
+import 'package:app/pages/player/player_page_view.dart';
 import 'package:flutter/material.dart';
 
 void main() {
+  app = App.production();
   runApp(
     Shell(app),
   );
 }
 
 class Shell extends StatelessWidget {
-  const Shell(this.app, {super.key});
+  const Shell(
+    this.app, {
+    super.key,
+  });
 
   final App app;
 
@@ -30,65 +33,8 @@ class Shell extends StatelessWidget {
                   color: Colors.black87,
                 ),
               ),
-              home: const HomeView(),
+              home: const PlayerPageView(),
             ),
-    );
-  }
-}
-
-class HomeView extends StatefulWidget {
-  const HomeView({super.key});
-
-  @override
-  State<HomeView> createState() => _HomeViewState();
-}
-
-class _HomeViewState extends State<HomeView> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Image.asset(
-          'assets/app-icon.png',
-          width: 48,
-        ),
-      ),
-      body: PlayerView(
-        playlist: app.playlist,
-        player: app.player,
-      ),
-      bottomNavigationBar: BottomPlayer(
-        player: app.player,
-      ), // This trailing comma makes auto-formatting nicer for build methods.
-    );
-  }
-}
-
-class XSlider extends StatelessWidget {
-  const XSlider({
-    required this.value,
-    this.onChanged,
-    super.key,
-  });
-
-  final double value;
-  final ValueChanged<double>? onChanged;
-
-  @override
-  Widget build(BuildContext context) {
-    return SliderTheme(
-      data: SliderThemeData(
-        thumbColor: Colors.white,
-        thumbShape:
-            const RoundSliderThumbShape(enabledThumbRadius: 10, elevation: 3),
-        overlayColor: Colors.pinkAccent.withOpacity(0.3),
-        overlayShape: const RoundSliderOverlayShape(overlayRadius: 25),
-      ),
-      child: Slider(
-        value: value,
-        onChanged: onChanged,
-      ),
     );
   }
 }

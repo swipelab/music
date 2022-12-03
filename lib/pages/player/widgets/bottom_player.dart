@@ -3,19 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:stated/stated.dart';
 
-class PlayerButton extends StatelessWidget {
-  const PlayerButton({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container();
-  }
-}
-
-class BottomPlayer extends StatelessWidget {
-  const BottomPlayer({
+class PlayerControls extends StatelessWidget {
+  const PlayerControls({
     required this.player,
     Key? key,
   }) : super(key: key);

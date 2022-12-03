@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:app/lob/config/config.dart';
 import 'package:app/lob/playlist.dart';
-import 'package:app/services/media_service.dart';
+import 'package:app/system/media.dart';
 import 'package:stated/stated.dart';
 import 'player_state.dart';
 
@@ -16,13 +16,13 @@ class Player extends Stated<PlayerState> with Disposer {
     mediaService.subscribe(setState).disposeBy(this);
   }
 
-  final MediaService mediaService;
+  final Media mediaService;
   final Playlist playlist;
 
   final Config config;
 
-  Content? _current;
-  final List<Content> _history = <Content>[];
+  MediaAsset? _current;
+  final List<MediaAsset> _history = <MediaAsset>[];
 
   bool get _isShuffled => config.playerIsShuffleOn.value;
 
@@ -40,7 +40,7 @@ class Player extends Stated<PlayerState> with Disposer {
     }
   }
 
-  Future<void> play([Content? item]) async {
+  Future<void> play([MediaAsset? item]) async {
     _pushHistory(_current);
 
     _current = item;
@@ -104,7 +104,7 @@ class Player extends Stated<PlayerState> with Disposer {
     );
   }
 
-  void _pushHistory(Content? current) {
+  void _pushHistory(MediaAsset? current) {
     if (current == null) {
       return;
     }

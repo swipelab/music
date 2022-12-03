@@ -3,7 +3,7 @@ import 'package:stated/stated.dart';
 
 import 'package:audioplayers/audioplayers.dart' as audio;
 
-class MediaService extends ChangeNotifier with Disposable, Disposer, AsyncInit {
+class Media extends ChangeNotifier with Disposable, Disposer, AsyncInit {
   late audio.AudioPlayer _player;
 
   bool get isPlaying => _player.state == audio.PlayerState.playing;
@@ -32,14 +32,19 @@ class MediaService extends ChangeNotifier with Disposable, Disposer, AsyncInit {
   void stop() => _player.stop();
 
   void play(
-    String url, {
+    Uri url, {
     Duration? position,
   }) {
     audio.Source? source;
-    if (url.startsWith('music/')) {
-      source = audio.AssetSource(url);
-    } else {
-      source = audio.UrlSource(url);
+    if (url.scheme == 'assets') {
+      source = audio.AssetSource(url.path.substring(1));
+    } else if (url.scheme == 'http' || url.scheme == 'https') {
+      source = audio.UrlSource(url.toString());
+    } else if (url.scheme == 'files') {
+      source = audio.DeviceFileSource(url.toFilePath());
+    }
+    if (source == null) {
+      return;
     }
     _player.play(source, position: position).ignore();
   }
